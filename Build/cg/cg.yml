@@ -1,17 +1,17 @@
 parameters:
 - name: config
-  type: object
+  type: string
   values:
-    - os: windows
-      arch: x86
-    - os: windows
-      arch: x64
-    - os: windows
-      arch: arm64
-    - os: macOS
-      arch: x64
-    - os: linux
-      arch: x64
+  - windows-x86
+  - windows-x64
+  - windows-arm64
+  - linux-x64
+  - linux-arm32
+  - linux-arm64
+  - macos-x64
+  - macos-arm64
+  - alpine-x64
+  - alpine-arm64
 - name: preRelease
   displayName: Pre-release
   type: boolean
