@@ -43,24 +43,10 @@ stages:
 - stage: build
   jobs:
   - job: build
-    parameters:
-    - name: config
-      type: string
-      values:
-      - windows-x86
-      - windows-x64
-      - windows-arm64
-      - linux-x64
-      - linux-arm32
-      - linux-arm64
-      - macos-x64
-      - macos-arm64
-      - alpine-x64
-      - alpine-arm64
     pool:
       vmImage: 'windows-latest'
     steps:
-      - ${{ each config in parameters.config }}:
+      - ${{ each config in ['windows-x86', 'windows-x64', 'windows-arm64', 'linux-x64', 'linux-arm32', 'linux-arm64', 'macos-x64', 'macos-arm64', 'alpine-x64', 'alpine-arm64'] }}:
         - powershell: |
             Write-Host "config = $(config)"
             Write-Host "preRelease = $(preRelease)"
