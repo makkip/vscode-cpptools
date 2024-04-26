@@ -26,6 +26,18 @@ parameters:
   values:
     - yes
     - no
+- name: currentVersion
+  displayName: Current version
+  type: string
+  default: '1.xx.x'
+- name: releaseVersion
+  displayName: Release version
+  type: string
+  default: '1.xx.x'
+- name: githubBranch
+  displayName: GitHub branch override (if different from release/insiders)
+  type: string
+  default: ''
 
 stages:
 - stage: verify
@@ -49,7 +61,10 @@ stages:
     steps:
       - ${{ each config in parameters.config }}:
         - powershell: |
-            Write-Host "config.os = $(config.os)"
-            Write-Host "config.arch = $(config.arch)"
+            Write-Host "config = $(config)"
             Write-Host "preRelease = $(preRelease)"
-          displayName: check ${{ config.os }} ${{ config.arch }}
+            Write-Host "correctBinaryVersion = $(correctBinaryVersion)"
+            Write-Host "currentVersion = $(currentVersion)"
+            Write-Host "releaseVersion = $(releaseVersion)"
+            Write-Host "githubBranch = $(githubBranch)"
+          displayName: check ${{ config }}
