@@ -1,3 +1,4 @@
+parameters:
 - name: preRelease
   displayName: Pre-release
   type: boolean
