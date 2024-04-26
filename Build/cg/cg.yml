@@ -37,7 +37,6 @@ parameters:
 - name: githubBranch
   displayName: GitHub branch override (if different from release/insiders)
   type: string
-  optional: true
   default: ''
 
 stages:
