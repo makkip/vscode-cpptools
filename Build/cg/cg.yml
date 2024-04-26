@@ -46,8 +46,9 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - checkout: none
     - powershell: |
-        Write-Host "correctBinaryVersion = $(parameters.correctBinaryVersion)"
+        Write-Host "correctBinaryVersion = ${{ parameters.correctBinaryVersion }}"
         Write-Host "##vso[task.logissue type=error]correctBinaryVersion must be set to 'yes'."
         exit 1
       displayName: self-attestation
@@ -59,12 +60,13 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
-      - ${{ each config in parameters.configs }}:
-        - powershell: |
-            Write-Host "config = $(config)"
-            Write-Host "preRelease = $(parameters.preRelease)"
-            Write-Host "correctBinaryVersion = $(parameters.correctBinaryVersion)"
-            Write-Host "currentVersion = $(parameters.currentVersion)"
-            Write-Host "releaseVersion = $(parameters.releaseVersion)"
-            Write-Host "githubBranch = $(parameters.githubBranch)"
-          displayName: check ${{ config }}
+    - checkout: none
+    - ${{ each config in parameters.configs }}:
+      - powershell: |
+          Write-Host "config = ${{ config }}"
+          Write-Host "preRelease = ${{ parameters.preRelease }}"
+          Write-Host "correctBinaryVersion = ${{ parameters.correctBinaryVersion }}"
+          Write-Host "currentVersion = ${{ parameters.currentVersion }}"
+          Write-Host "releaseVersion = ${{ parameters.releaseVersion }}"
+          Write-Host "githubBranch = ${{ parameters.githubBranch }}"
+        displayName: check ${{ config }}
