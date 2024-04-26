@@ -61,6 +61,7 @@ stages:
       vmImage: 'windows-latest'
     steps:
     - checkout: none
+
     - ${{ each config in parameters.configs }}:
       - powershell: |
           Write-Host "config = ${{ config }}"
@@ -70,3 +71,5 @@ stages:
           Write-Host "releaseVersion = ${{ parameters.releaseVersion }}"
           Write-Host "githubBranch = ${{ parameters.githubBranch }}"
         displayName: check ${{ config }}
+
+    - template: test.yml

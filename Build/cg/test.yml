@@ -1,0 +1,21 @@
+parameters:
+  - name: configs
+    type: object
+    default:
+      - os: windows
+        arch: x86
+        buildId: 1
+      - os: windows
+        arch: x64
+        buildId: 2
+      - os: windows
+        arch: arm64
+        buildId: 3
+      - os: linux
+        arch: x64
+        buildId: 4
+
+steps:
+- ${{ each config in parameters.configs }}:
+  - script: echo ${{ config.os }} ${{ config.arch }} ${{ config.buildId }}
+    displayName: 'Build ${{ config.os }} ${{ config.arch }} ${{ config.buildId }}'
