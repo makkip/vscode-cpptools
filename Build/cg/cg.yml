@@ -1,17 +1,3 @@
-parameters:
-- name: config
-  type: string
-  values:
-  - windows-x86
-  - windows-x64
-  - windows-arm64
-  - linux-x64
-  - linux-arm32
-  - linux-arm64
-  - macos-x64
-  - macos-arm64
-  - alpine-x64
-  - alpine-arm64
 - name: preRelease
   displayName: Pre-release
   type: boolean
@@ -56,6 +42,20 @@ stages:
 - stage: build
   jobs:
   - job: build
+    parameters:
+    - name: config
+      type: string
+      values:
+      - windows-x86
+      - windows-x64
+      - windows-arm64
+      - linux-x64
+      - linux-arm32
+      - linux-arm64
+      - macos-x64
+      - macos-arm64
+      - alpine-x64
+      - alpine-arm64
     pool:
       vmImage: 'windows-latest'
     steps:
