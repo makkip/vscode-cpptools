@@ -73,3 +73,5 @@ stages:
         displayName: check ${{ config }}
 
     - template: test.yml
+      parameters:
+        SomeVar: 'this is passed to the template'

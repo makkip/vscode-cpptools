@@ -1,4 +1,5 @@
 parameters:
+  SomeVar: 'someValue'
   - name: configs
     type: object
     default:
@@ -16,6 +17,8 @@ parameters:
         buildId: 4
 
 steps:
+- script: echo ${{ parameters.SomeVar }}
+  displayName: 'Print SomeVar'
 - ${{ each config in parameters.configs }}:
   - script: echo ${{ config.os }} ${{ config.arch }} ${{ config.buildId }}
     displayName: 'Build ${{ config.os }} ${{ config.arch }} ${{ config.buildId }}'
