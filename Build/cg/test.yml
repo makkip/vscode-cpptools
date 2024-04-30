@@ -1,5 +1,7 @@
 parameters:
-  SomeVar: 'someValue'
+  - name: SomeVar
+    type: string
+    default: 'default value'  
   - name: configs
     type: object
     default:
