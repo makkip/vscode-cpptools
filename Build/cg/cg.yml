@@ -47,6 +47,9 @@ stages:
       vmImage: 'windows-latest'
     steps:
     - checkout: none
+    - ${{ if eq(parameters.correctBinaryVersion, 'no') }}:
+      - 'binary version in CMakeLists.txt needs to be updated before the pipeline can be scheduled'
+
     - powershell: |
         Write-Host "correctBinaryVersion = ${{ parameters.correctBinaryVersion }}"
         Write-Host "##vso[task.logissue type=error]correctBinaryVersion must be set to 'yes'."
