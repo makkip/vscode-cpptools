@@ -24,7 +24,7 @@ parameters:
   values:
   - release
   - insiders
-  - ''
+  - 
 
 stages:
 - stage: verify
