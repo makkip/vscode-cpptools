@@ -40,9 +40,9 @@ stages:
     - checkout: none
     - ${{ if eq(parameters.correctBinaryVersion, 'no') }}:
       - 'binary version in CMakeLists.txt needs to be updated before the pipeline can be scheduled'
-    - ${{ if and(eq(parameters.githubBranch, 'release'), eq(parameters.preRelease, false)) }}:
+    - ${{ if and(eq(parameters.githubBranch, 'release'), eq(parameters.preRelease, true)) }}:
       - 'release branch build marked as pre-release'
-    - ${{ if and(eq(parameters.githubBranch, 'insiders'), eq(parameters.preRelease, true)) }}:
+    - ${{ if and(eq(parameters.githubBranch, 'insiders'), eq(parameters.preRelease, false)) }}:
       - 'insiders branch build marked as release'
     - ${{ if and(eq(parameters.githubBranch, 'other branch or commit hash'), or(eq(parameters.preRelease, false), not(contains(parameters.releaseVersion, '-dogfood')))) }}:
       - 'When using commit hashes or a branch other than release or insiders, the build must be marked as pre-release and have -dogfood in the release version'
