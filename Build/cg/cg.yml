@@ -1,17 +1,4 @@
 parameters:
-- name: configs   # list of configurations to build
-  type: object
-  default:
-    - windows-x86
-    - windows-x64
-    - windows-arm64
-    - linux-x64
-    - linux-arm32
-    - linux-arm64
-    - macos-x64
-    - macos-arm64
-    - alpine-x64
-    - alpine-arm64
 - name: preRelease
   displayName: Pre-release
   type: boolean
@@ -26,18 +13,18 @@ parameters:
   values:
     - yes
     - no
-- name: currentVersion
-  displayName: Current version
-  type: string
-  default: '1.xx.x'
 - name: releaseVersion
   displayName: Release version
   type: string
   default: '1.xx.x'
 - name: githubBranch
-  displayName: GitHub branch override (if different from release/insiders)
+  displayName: GitHub branch or commit hash
   type: string
-  default: ''
+  default: 'release'
+  values:
+  - release
+  - insiders
+  - ''
 
 stages:
 - stage: verify
@@ -49,13 +36,13 @@ stages:
     - checkout: none
     - ${{ if eq(parameters.correctBinaryVersion, 'no') }}:
       - 'binary version in CMakeLists.txt needs to be updated before the pipeline can be scheduled'
+    - ${{ if and(eq(parameters.githubBranch, 'release'), eq(parameters.preRelease, false)) }}:
+      - 'release branch build marked as pre-release'
+    - ${{ if and(eq(parameters.githubBranch, 'insiders'), eq(parameters.preRelease, true)) }}:
+      - 'insiders branch build marked as release'
+    - ${{ if and(ne(parameters.githubBranch, 'release'), ne(parameters.githubBranch, 'insiders'), or(eq(parameters.preRelease, false), not(contains(parameters.releaseVersion, '-dogfood')))) }}:
+      - 'When using commit hashes or a branch other than release or insiders, the build must be marked as pre-release and have -dogfood in the release version'
 
-    - powershell: |
-        Write-Host "correctBinaryVersion = ${{ parameters.correctBinaryVersion }}"
-        Write-Host "##vso[task.logissue type=error]correctBinaryVersion must be set to 'yes'."
-        exit 1
-      displayName: self-attestation
-      condition: eq('${{ parameters.correctBinaryVersion }}', 'no')
 
 - stage: build
   jobs:
@@ -64,16 +51,6 @@ stages:
       vmImage: 'windows-latest'
     steps:
     - checkout: none
-
-    - ${{ each config in parameters.configs }}:
-      - powershell: |
-          Write-Host "config = ${{ config }}"
-          Write-Host "preRelease = ${{ parameters.preRelease }}"
-          Write-Host "correctBinaryVersion = ${{ parameters.correctBinaryVersion }}"
-          Write-Host "currentVersion = ${{ parameters.currentVersion }}"
-          Write-Host "releaseVersion = ${{ parameters.releaseVersion }}"
-          Write-Host "githubBranch = ${{ parameters.githubBranch }}"
-        displayName: check ${{ config }}
 
     - template: test.yml
       parameters:
