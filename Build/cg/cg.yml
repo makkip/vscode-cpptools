@@ -46,6 +46,8 @@ stages:
       - 'insiders branch build marked as release'
     - ${{ if and(eq(parameters.githubBranch, 'other branch or commit hash'), or(eq(parameters.preRelease, false), not(contains(parameters.releaseVersion, '-dogfood')))) }}:
       - 'When using commit hashes or a branch other than release or insiders, the build must be marked as pre-release and have -dogfood in the release version'
+    - ${{ if and(ne(parameters.githubBranch, 'other branch or commit hash'), contains(parameters.releaseVersion, '-')) }}:
+      - 'When using release or insiders branches, the release version must not contain a suffix'
 
 
 - stage: build
