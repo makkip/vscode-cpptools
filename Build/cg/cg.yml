@@ -2,7 +2,7 @@ parameters:
 - name: preRelease
   displayName: Pre-release
   type: boolean
-  default: false
+  default: true
   values:
     - true
     - false
@@ -20,10 +20,15 @@ parameters:
 - name: githubBranch
   displayName: GitHub branch or commit hash
   type: string
-  default: 'release'
+  default: 'insiders'
   values:
   - release
   - insiders
+  - other branch or commit hash
+- name: githubAlt
+  displayName: Other GitHub branch or commit hash (optional)
+  type: string
+  default: 'n/a'
 
 stages:
 - stage: verify
@@ -39,7 +44,7 @@ stages:
       - 'release branch build marked as pre-release'
     - ${{ if and(eq(parameters.githubBranch, 'insiders'), eq(parameters.preRelease, true)) }}:
       - 'insiders branch build marked as release'
-    - ${{ if and(ne(parameters.githubBranch, 'release'), ne(parameters.githubBranch, 'insiders'), or(eq(parameters.preRelease, false), not(contains(parameters.releaseVersion, '-dogfood')))) }}:
+    - ${{ if and(eq(parameters.githubBranch, 'other branch or commit hash'), or(eq(parameters.preRelease, false), not(contains(parameters.releaseVersion, '-dogfood')))) }}:
       - 'When using commit hashes or a branch other than release or insiders, the build must be marked as pre-release and have -dogfood in the release version'
 
 
