@@ -56,8 +56,7 @@ stages:
     - ${{ if ne(length(split(parameters.releaseVersion, '.')), 3) }}:
       - 'Versions require three numbers separated by periods'
     - powershell: |
-        Write-Host "${{ split(parameters.releaseVersion, '-')[0] }}"
-        Write-Host "${{ split(parameters.releaseVersion, '-')[1] }}"
+        Write-Host "${{ if eq(parameters.githubBranch, 'other branch or commit hash'): parameters.githubAlt else: parameters.githubBranch }}"
 
 
 - stage: build
