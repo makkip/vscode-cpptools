@@ -49,7 +49,7 @@ stages:
     - ${{ if and(ne(parameters.githubBranch, 'other branch or commit hash'), contains(parameters.releaseVersion, '-')) }}:
       - 'When using release or insiders branches, the release version must not contain a suffix'
     - ${{ if contains(parameters.releaseVersion, '-') }}:
-      - ${{ if gt(length(split(parameters.releaseVersion, '-')), 1) }}:
+      - ${{ if gt(length(split(parameters.releaseVersion, '-')), 2) }}:
         - 'Only one hyphen is allowed in the version'
       - ${{ if ne(length(split(parameters.releaseVersion, '.')), 3) }}:
         - 'Versions require three numbers separated by periods'
