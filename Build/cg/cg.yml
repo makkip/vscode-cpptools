@@ -48,6 +48,16 @@ stages:
       - 'When using commit hashes or a branch other than release or insiders, the build must be marked as pre-release and have -dogfood in the release version'
     - ${{ if and(ne(parameters.githubBranch, 'other branch or commit hash'), contains(parameters.releaseVersion, '-')) }}:
       - 'When using release or insiders branches, the release version must not contain a suffix'
+    - ${{ if contains(parameters.releaseVersion, '-') }}:
+      - ${{ if gt(length(split(parameters.releaseVersion, '-')), 1) }}:
+        - 'Only one hyphen is allowed in the version'
+      - ${{ if ne(length(split(parameters.releaseVersion, '.')), 3) }}:
+        - 'Versions require three numbers separated by periods'
+    - ${{ if ne(length(split(parameters.releaseVersion, '.')), 3) }}:
+      - 'Versions require three numbers separated by periods'
+    - powershell: |
+        Write-Host "${{ split(parameters.releaseVersion, '-')[0] }}"
+        Write-Host "${{ split(parameters.releaseVersion, '-')[1] }}"
 
 
 - stage: build
